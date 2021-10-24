@@ -1,6 +1,7 @@
 package br.com.LojaBack.LojaBack.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,19 +17,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
+import br.com.LojaBack.LojaBack.exception.RecursoNaoEncontradoException;
 import br.com.LojaBack.LojaBack.model.Cliente;
 import br.com.LojaBack.LojaBack.repository.ClienteRepository;
+import br.com.LojaBack.LojaBack.service.ClienteService;
 
 /**
  *
  * A sample greetings controller to return greeting text
  */
 @RestController
-public class GreetingsController {
+@RequestMapping("/Cliente")
+public class ClienteController {
 
 	@Autowired
 	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private ClienteService clienteService;
 
 	@RequestMapping(value = "/{name}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
@@ -36,7 +44,7 @@ public class GreetingsController {
 		return "Hello " + name + "!";
 	}
 
-	// FAZER CADASTRO
+	// *************   FAZER CADASTRO   *************
 	@PostMapping(value = "cadastrar")
 	@ResponseBody
 	public ResponseEntity<Cliente> cadastrar(@RequestBody Cliente cliente) {
@@ -47,7 +55,7 @@ public class GreetingsController {
 
 	}
 
-	// FAZER SELECT EM TODOS COM RESPONSEENTITY
+	// *************   METODOS DE FAZER SELECT   *************
 	@GetMapping
 	@ResponseBody
 	public ResponseEntity<List<Cliente>> listarClientes() {
@@ -57,7 +65,19 @@ public class GreetingsController {
 		return new ResponseEntity<List<Cliente>>(lista, HttpStatus.OK);
 	}
 	
-	// FAZER SELECT EM TODOS SEM RESPONSEENTITY
+	@GetMapping("/buscar/{id}")
+	public Cliente buscar(@PathVariable Long id) {
+		
+		try {
+			Cliente cliente = clienteService.buscarPorCodigo(id);
+			
+			return cliente;
+		}catch (RecursoNaoEncontradoException excessao) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado", excessao);
+		}
+	}
+	
+	//*************   FAZER SELECT EM TODOS SEM RESPONSEENTITY   *************
 	@GetMapping(value = "listar")
 	public List<Cliente> listarTodos(){
 		
@@ -66,6 +86,7 @@ public class GreetingsController {
 		return lista;
 	}
 
+	//*************   FAZER DELETE NO CLIENTE   *************
 	@DeleteMapping(value = "deletar")
 	@ResponseBody
 	public ResponseEntity<String> deletarCliente(@RequestParam Long id) {
