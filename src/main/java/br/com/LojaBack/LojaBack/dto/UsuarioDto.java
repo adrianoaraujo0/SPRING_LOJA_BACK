@@ -1,42 +1,22 @@
-package br.com.LojaBack.LojaBack.model;
+package br.com.LojaBack.LojaBack.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import br.com.LojaBack.LojaBack.model.Cliente;
+import br.com.LojaBack.LojaBack.model.Usuario;
 
-@Entity
-public class Usuario {
+public class UsuarioDto {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
 	private String email;
 	private String telefone;
 	private String senha;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "idCliente")
 	private Cliente cliente;
 
-	public Usuario() {
-
+	public Usuario TransformarEmUsuario() {
+		return new Usuario(id, nome, email, telefone, senha, cliente);
 	}
-
-	public Usuario(Long id, String nome, String email, String telefone, String senha, Cliente cliente) {
-
-		this.id = id;
-		this.nome = nome;
-		this.email = email;
-		this.telefone = telefone;
-		this.senha = senha;
-		this.cliente = cliente;
-	}
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -84,5 +64,7 @@ public class Usuario {
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
+	
+	
 
 }

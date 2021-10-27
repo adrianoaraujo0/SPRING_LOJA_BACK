@@ -10,36 +10,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.LojaBack.LojaBack.dto.UsuarioDto;
 import br.com.LojaBack.LojaBack.model.Usuario;
-import br.com.LojaBack.LojaBack.repository.UsuarioRepository;
+import br.com.LojaBack.LojaBack.service.UsuarioService;
 
 @RestController
-@RequestMapping("/Usuario")
+@RequestMapping("/usuario")
 public class UsuarioController {
 	
 	@Autowired
-	private UsuarioRepository usuarioRepository;
+	private UsuarioService usuarioService;
 	
 	
 	
-	@PostMapping("/Salvar")
-	public Usuario cadastrar(Usuario usuario) {
+	@PostMapping("/salvar")
+	public Usuario cadastrar(UsuarioDto dto) {
 		
-		return usuarioRepository.save(usuario);
+		return usuarioService.salvar(dto.TransformarEmUsuario());
 		
 	}
 	
 	@GetMapping
 	public List<Usuario> listarTodos(){
 		
-		return usuarioRepository.findAll();
+		return usuarioService.listar();
 		
 	}
 	
-	@DeleteMapping("/Deletar")
+	@DeleteMapping("/deletar")
 	public String deletePorId(@RequestParam Long id) {
 		
-		 usuarioRepository.deleteById(id);
+		usuarioService.remover(id);
 		 
 		 return "Deletado com sucesso";
 	}

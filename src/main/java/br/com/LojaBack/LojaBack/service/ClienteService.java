@@ -1,5 +1,6 @@
 package br.com.LojaBack.LojaBack.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,27 @@ public class ClienteService {
 		}
 		return busca.get();
 
+	}
+
+	// SALVAR
+	public Cliente salvar(Cliente cliente) {
+		return clienteRepository.save(cliente);
+	}
+
+	// SELECT
+	public List<Cliente> listarCliente() {
+		return clienteRepository.findAll();
+	}
+
+	// DELETE
+	public void remover(Long id) {
+		clienteRepository.deleteById(id);
+
+	}
+
+	//ALTERAR
+	public Cliente alterar(Cliente cliente) {
+		return clienteRepository.save(cliente);
 	}
 
 }

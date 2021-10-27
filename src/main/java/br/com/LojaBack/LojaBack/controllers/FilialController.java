@@ -10,36 +10,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.LojaBack.LojaBack.dto.FilialDto;
 import br.com.LojaBack.LojaBack.model.Filial;
-import br.com.LojaBack.LojaBack.repository.FilialRepository;
+import br.com.LojaBack.LojaBack.model.Usuario;
+import br.com.LojaBack.LojaBack.service.FilialService;
 
 @RestController
-@RequestMapping("/Filial")
+@RequestMapping("/filial")
 public class FilialController {
-
 	@Autowired
-	FilialRepository filialRepository;
+	private FilialService filialService;
 	
-	@PostMapping("/Salvar")
-	public Filial cadastrar(@RequestParam Filial filial) {
-
-		return filialRepository.save(filial);
-
-	}
 	
-	@DeleteMapping("/Deletar")
-	public String deletarPorId(Long id) {
+	
+	@PostMapping("/salvar")
+	public Filial cadastrar(FilialDto dto) {
 		
-		filialRepository.deleteById(id);
+		return filialService.salvar(dto.TransformarEmFilial());
 		
-		return  "Deletado com sucesso";
 	}
 	
 	@GetMapping
 	public List<Filial> listarTodos(){
-		List<Filial> lista = filialRepository.findAll();
 		
-		return lista;
+		return filialService.listar();
+		
+	}
+	
+	@DeleteMapping("/deletar")
+	public String deletePorId(@RequestParam Long id) {
+		
+		filialService.remover(id);
+		 
+		 return "Deletado com sucesso";
 	}
 	
 }

@@ -1,38 +1,19 @@
-package br.com.LojaBack.LojaBack.model;
+package br.com.LojaBack.LojaBack.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import br.com.LojaBack.LojaBack.model.Cliente;
+import br.com.LojaBack.LojaBack.model.Filial;
 
-@Entity
-public class Filial {
+public class FilialDto {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String razaoSocial;
 	private int cnpj;
 	private String apelidoLoja;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_cliente")
 	private Cliente cliente;
 
-	public Filial() {
-
-	}
-
-	public Filial(Long id, String razaoSocial, int cnpj, String apelidoLoja, Cliente cliente) {
-		super();
-		this.id = id;
-		this.razaoSocial = razaoSocial;
-		this.cnpj = cnpj;
-		this.apelidoLoja = apelidoLoja;
-		this.cliente = cliente;
+	public Filial TransformarEmFilial() {
+		return new Filial(id, razaoSocial, cnpj, apelidoLoja, cliente);
 	}
 
 	public Long getId() {
